@@ -9,9 +9,14 @@ contract ZombieFeeding is ZombieFactory,Ownable {
 
     //kitty 的 地址
     address ckAddress = 0x06012c8cf97BEaD5deAe237070F9587f8E7A266d;
-    
-    function feedAndMultiply (uint _zombieId, uint _targetDna, string memory _species  ) internal  {
-        require(zombieToOwner[_zombieId] == msg.sender, "not you zombie");
+    //
+
+    modifier onlyOwnerOf(uint _zombieId){
+        require(zombieToOwner[_zombieId] == msg.sender,"you are not owner!!");
+        _;
+    }
+
+    function feedAndMultiply (uint _zombieId, uint _targetDna, string memory _species  ) internal onlyOwnerOf(_zombieId) {
         Zombie storage myZombie = zombies[_zombieId];
 
         require(_isReady(myZombie),"cant eat");
